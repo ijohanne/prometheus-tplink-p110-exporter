@@ -1,0 +1,29 @@
+[package]
+name = "prometheus-tplink-p110-exporter"
+version = "0.1.0"
+edition = "2021"
+authors = [ "Ian Johannesen <ij@perlpimp.net>" ]
+license = "agpl-3.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+serde_json = { version = "1" }
+anyhow = "1"
+clap = { version = "3.0.13", features = ["derive"] }
+warp = "0.3"
+prometheus = "0.13.0"
+rsa = { version = "0.5", features = [ "pem", "default" ] }
+reqwest = { version = "0.11", features = [ "json", "cookies" ] }
+sha2 = "0.10"
+base64 = "0.13"
+rand = "0.8"
+aes = "0.8"
+cbc = "0.1"
+hex-literal = "0.3"
+sha-1 = "0.10"
+
+[profile.release]
+opt-level = 3
+debug = false
