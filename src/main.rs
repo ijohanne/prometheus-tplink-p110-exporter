@@ -61,7 +61,7 @@ impl Default for PrometheusStats {
 #[clap(author, version, about, long_about = None)]
 struct Args {
     #[clap(long)]
-    hosts: Vec<String>,
+    host: Vec<String>,
 
     #[clap(long)]
     username: String,
@@ -114,7 +114,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         stats,
         args.username.clone(),
         args.password.clone(),
-        args.hosts.clone(),
+        args.host.clone(),
     ));
 
     warp::serve(metrics_route)
