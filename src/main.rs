@@ -72,7 +72,7 @@ struct Args {
     #[clap(long)]
     password: String,
 
-    #[clap(long, default_value = "9984")]
+    #[clap(long, default_value = "9981")]
     listen_port: u64,
 
     #[clap(long, default_value = "127.0.0.1")]
