@@ -2,7 +2,7 @@
 ## Build
 Simply build using Cargo, as only dependency is openssl
 ## Running
-Set `username`, `password`, and any amount of host(s) (plugs) you want to monitor.
+Set `username`, `password`, and any amount of host(s) (plugs) you want to monitor. Use the included `dashboard.json` once prometheus is scraping the exporter.
 ```bash
 $> prometheus-tplink-p110-exporter --help
 prometheus-tplink-p110-exporter 0.1.0
