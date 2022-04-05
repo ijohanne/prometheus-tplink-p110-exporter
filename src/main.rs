@@ -30,13 +30,16 @@ impl PrometheusStats {
     pub fn new() -> Self {
         let instance = Self {
             power_usage: GaugeVec::new(
-                Opts::new("power_usage", "Power usage"),
-                &["device_id", "nickname"],
+                Opts::new("tplink_power_usage", "Power usage"),
+                &["device_id", "nickname", "model"],
             )
             .expect("metric can be created"),
 
-            rssi: GaugeVec::new(Opts::new("rssi", "RSSI"), &["device_id", "nickname"])
-                .expect("metric can be created"),
+            rssi: GaugeVec::new(
+                Opts::new("tplink_rssi", "RSSI"),
+                &["device_id", "nickname", "model"],
+            )
+            .expect("metric can be created"),
             registry: Registry::new(),
         };
         instance
@@ -162,11 +165,12 @@ async fn data_collector(
                                             .with_label_values(&[
                                                 &device_info.0.clone(),
                                                 &device_info.1.clone(),
+                                                &"P110",
                                             ])
                                             .set(device_info.2 as f64);
                                         match get_current_energy_usage(&client, host, aes_key, aes_iv, &token).await {
                                                     Ok(power_usage) => {
-                                                        stats.power_usage.with_label_values(&[&device_info.0.clone(), &device_info.1.clone()]).set(power_usage as f64);
+                                                        stats.power_usage.with_label_values(&[&device_info.0.clone(), &device_info.1.clone(), &"P110"]).set(power_usage as f64);
                                                     },
                                                         Err(e) => println!("Could not obtain power usage level for {} due to {}", host, e),
                                                 }
