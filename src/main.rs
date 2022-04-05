@@ -388,14 +388,16 @@ async fn get_device_info(
                 .as_str()
                 .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
                 .to_string(),
-            inner_json
-                .get("result")
-                .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
-                .get("nickname")
-                .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
-                .as_str()
-                .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
-                .to_string(),
+            str::from_utf8(&base64::decode(
+                inner_json
+                    .get("result")
+                    .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
+                    .get("nickname")
+                    .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
+                    .as_str()
+                    .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?,
+            )?)?
+            .to_owned(),
             inner_json
                 .get("result")
                 .ok_or_else(|| anyhow!("Incorrect JSON structure in decrypted response"))?
