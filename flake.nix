@@ -12,12 +12,13 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       flake-utils,
       rust-overlay,
       ...
     }:
-    flake-utils.lib.eachDefaultSystem (
+    (flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = import nixpkgs {
@@ -59,5 +60,7 @@
           ];
         };
       }
-    );
+    )) // {
+      nixosModules.default = import ./module.nix self;
+    };
 }
