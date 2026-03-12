@@ -26,16 +26,16 @@ in
             Address to listen on.
           '';
         };
-        username = mkOption {
-          type = types.nullOr types.str;
+        usernameFile = mkOption {
+          type = types.path;
           description = ''
-            TP-Link username to use (usually email address)
+            Path to a file containing the TP-Link username (usually email address).
           '';
         };
-        password = mkOption {
-          type = types.nullOr types.str;
+        passwordFile = mkOption {
+          type = types.path;
           description = ''
-            TP-Link password to use
+            Path to a file containing the TP-Link password.
           '';
         };
         hosts = mkOption {
@@ -73,25 +73,31 @@ in
     systemd.services."prometheus-${name}-exporter" =
       let
         hosts = concatStringsSep " " (forEach cfg.hosts (host: ''--host ${host}''));
+        wrapper = pkgs.writeShellScript "prometheus-${name}-exporter" ''
+          exec ${getBin package}/bin/prometheus-tplink-p110-exporter \
+            --listen-address ${cfg.listenAddress} \
+            --listen-port ${toString cfg.port} \
+            --username "$(cat "$CREDENTIALS_DIRECTORY/username")" \
+            --password "$(cat "$CREDENTIALS_DIRECTORY/password")" \
+            ${hosts}
+        '';
       in
       {
-        environment = { };
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig.Restart = "always";
-        serviceConfig.PrivateTmp = true;
-        serviceConfig.WorkingDirectory = /tmp;
-        serviceConfig.DynamicUser = false;
-        serviceConfig.User = "${cfg.user}";
-        serviceConfig.Group = "${cfg.group}";
-        serviceConfig.ExecStart = ''
-          ${getBin package}/bin/prometheus-tplink-p110-exporter \
-          --listen-address ${cfg.listenAddress} \
-          --listen-port ${toString cfg.port} \
-          --username ${cfg.username} \
-          --password ${cfg.password} \
-          ${hosts}
-        '';
+        serviceConfig = {
+          Restart = "always";
+          PrivateTmp = true;
+          WorkingDirectory = "/tmp";
+          DynamicUser = false;
+          User = cfg.user;
+          Group = cfg.group;
+          ExecStart = toString wrapper;
+          LoadCredential = [
+            "username:${cfg.usernameFile}"
+            "password:${cfg.passwordFile}"
+          ];
+        };
       };
 
     services.prometheus.scrapeConfigs = mkIf cfg.enableLocalScraping [
