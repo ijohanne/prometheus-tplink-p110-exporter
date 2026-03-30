@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.services.prometheus-tplink-p110-exporter;
   name = "tplink-p110";
-  package = self.packages.${pkgs.system}.default;
+  package = self.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
   options.services.prometheus-tplink-p110-exporter = with types; mkOption {
