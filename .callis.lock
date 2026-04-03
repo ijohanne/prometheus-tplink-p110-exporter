@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "name": "rust-best-practices",
+      "source": "github:apollographql/skills@rust-best-practices",
+      "version": "e1979d2f1e7c",
+      "agents": [
+        "claude",
+        "opencode",
+        "codex-cli"
+      ],
+      "global": false,
+      "installed_at": "2026-04-03T19:55:19.358494+00:00",
+      "updated_at": "2026-04-03T19:55:19.358494+00:00"
+    },
+    {
+      "name": "git-commit",
+      "source": "github:github/awesome-copilot@git-commit",
+      "version": "0c3c5bbbfb2a",
+      "agents": [
+        "claude",
+        "opencode",
+        "codex-cli"
+      ],
+      "global": false,
+      "installed_at": "2026-04-03T19:55:22.294902+00:00",
+      "updated_at": "2026-04-03T19:55:22.294902+00:00"
+    }
+  ]
+}
